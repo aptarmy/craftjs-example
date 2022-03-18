@@ -17,8 +17,10 @@ export const Topbar = () => {
   const copyCurrentState = () => {
     const json = query.serialize();
     console.log(json);
-    copy(lz.encodeBase64(lz.compress(json)));
-    setSnackbarMessage('Copied to clipboard!');
+    const encodedData = lz.encodeBase64(lz.compress(json));
+    copy(encodedData);
+    window.localStorage.setItem('jsonData', encodedData);
+    setSnackbarMessage('Copied to clipboard, and saved to localStorage! Refresh your browser to see effect!');
   };
 
   const loadState = () => {
@@ -38,7 +40,7 @@ export const Topbar = () => {
           />
         </Grid>
         <Grid item>
-          <MaterialButton onClick={copyCurrentState} size="small" variant="outlined" color="secondary">copy current state</MaterialButton>
+          <MaterialButton onClick={copyCurrentState} size="small" variant="outlined" color="secondary">Copy & Save to localStorage</MaterialButton>
         </Grid>
        <MaterialButton 
           className="load-state-btn"
@@ -80,7 +82,7 @@ export const Topbar = () => {
           </DialogActions>
         </Dialog>
         <Snackbar
-          autoHideDuration={1000}
+          autoHideDuration={5000}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           open={!!snackbarMessage}
           onClose={() => setSnackbarMessage(null)}
